@@ -26,8 +26,8 @@ page shows a notice rather than a cramped layout.
 
 ## What it does
 
-- **Station map** — 2,224 stations over the borough outlines. With nothing selected, each is sized
-  and colored by its total trips (or by its typical miss in vs. expected mode)
+- **Station map** — 2,223 stations over the borough outlines. With nothing selected, each is sized
+  and colored by its total trips (or by its typical gap from expected, in vs. expected mode)
 - **Selection** — click a station, search for it by name, or pick a suggested starting point. The map
   zooms to the station and the partners carrying 90% of its shown trips, with lines to each partner
 - **Network of partners** — only the selected station and its top partners. Spokes run from the
@@ -36,7 +36,7 @@ page shows a notice rather than a cramped layout.
 - **Partners shown** — a slider from 10 to 50. The top 10 partners carry a median 24% of a
   station's trips, the top 50 about 56%
 - **Edge weight** — trips, or each pair's trips divided by what a gravity model predicts
-- **Classed symbols** — counts and typical miss use five quantile classes (ColorBrewer YlGnBu), vs.
+- **Classed symbols** — counts and typical gap use five quantile classes (ColorBrewer YlGnBu), vs.
   expected uses ColorBrewer RdBu with fixed breaks at 0.5, 0.8, 1.25 and 2×. On the map, size
   repeats the class; the legends label each class with the range of values in view
 - **Tooltips** — a station's trips from and to it; with a station selected, the trips between the two
@@ -73,7 +73,7 @@ district-level model because station-pair counts are far smaller and noisier. Ac
 trips agree within 5% in every distance band out to 16 km.
 
 The model is fitted once, offline, by `prep/fit_gravity.py` (numpy, Newton-Raphson on the full
-Hessian, about 20 seconds). The page loads each station's top 50 partners with their expected counts.
+Hessian, under a minute). The page loads each station's top 50 partners with their expected counts.
 
 ### What it shows
 
@@ -85,8 +85,11 @@ Riverside Blvd & W 67 St at 59× — 7.8 km up the Hudson River Greenway.
 Most under expected are very short hops in Lower Manhattan and Chelsea, 340 m to 1 km apart, most of
 them to or from a station on West St (the West Side Highway) or at Chelsea Piers.
 
-With nothing selected in vs. expected mode, the map shows each station's **typical miss**: the
-trip-weighted average of how far its partners on show sit from expected, as a factor.
+With nothing selected in vs. expected mode, the map shows each station's **typical gap from expected**: the
+trip-weighted average of how far its partners on show sit from expected, as a factor, in either
+direction. 1× means its riders go where size and distance predict; 2× means its partner trips are
+typically double or half what the model expects. Governors Island and Roosevelt Island rank highest,
+followed by isolated stations in industrial western Queens, around Maspeth and Long Island City.
 
 ### Caveats
 
@@ -124,7 +127,7 @@ The prep scripts are in `prep/` and run in order. They need Python 3 and numpy.
      that moved or was renumbered — the old ID goes quiet the month the new one starts. 2025 has
      eleven; each is merged and placed at the busier ID's location.
    - **Out of scope.** Jersey City and Hoboken stations (their trips are in separate files), plus the
-     lab, repair-shop and system IDs, are dropped.
+     lab, repair-shop, charging-depot and system IDs, are dropped.
 2. **`build_pairs.py`** — full-year trips between each pair of stations, by direction, from the
    station-pair OD table built by `build_od_tables.py` in
    [LinkedNetworkGraphChoroplethMap](https://github.com/ssitari/LinkedNetworkGraphChoroplethMap).

@@ -30,8 +30,10 @@ from common import CACHE, MONTHS, STATIONS_GPKG, canon, km
 
 GPKG_MONTHS = ["January", "Febuary", "March", "April", "May", "June", "July",
                "August", "September", "October", "November", "December"]
+# Non-public: a lab, a repair shop, system IDs, and an e-bike charging depot
+# ("Morgan HCT Charging", placeholder ID 1234.56) whose trips are staff moves.
 DROP_IDS    = {"NA", "Lab - NYC - Monolith", "Shop Morgan", "SYS016", "SYS018",
-               "SYS033", "SYS038"}
+               "SYS033", "SYS038", "1234.56"}
 HANDOFF_M   = 100   # metres
 HANDOFF_OVERLAP = 1  # months both IDs may be active (the switchover month)
 

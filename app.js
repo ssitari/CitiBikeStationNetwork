@@ -120,7 +120,7 @@ function quantileClasses(values, fmt) {
     color: scale,
     size: v => SEQ_SIZES[SEQ_COLORS.indexOf(scale(v))],
     rows: classRows(values, scale, SEQ_COLORS, SEQ_SIZES, fmt, false),
-    note: 'Ranges adjust to current view',
+    note: null,
   };
 }
 
@@ -136,7 +136,7 @@ function ratioClasses(values) {
 }
 
 // One value per station in view. With nothing selected: every station's total
-// trips, or its typical miss. With a station selected: each partner's trips
+// trips, or its typical gap from expected. With a station selected: each partner's trips
 // with it, or their ratio to expected.
 function buildView() {
   const value = new Map();
@@ -461,8 +461,7 @@ function renderLegend(el, sections) {
 
 function legendTitle() {
   if (state.sel === null) {
-    return useResidual() ? `Typical miss vs. expected, top ${state.k} partners`
-                         : 'Trips per station';
+    return useResidual() ? 'Typical gap from expected' : 'Trips per station';
   }
   const name = S[state.sel].name;
   return useResidual() ? `Vs. expected: trips with ${name}` : `Trips with ${name}`;
@@ -474,8 +473,13 @@ function updateLegends(view) {
     { color: SELECTED_FILL, r: SELECTED_R / 1.4, ring: SELECTED_RING, label: 'Selected station' },
     { color: CONTEXT_FILL, r: CONTEXT_R, label: 'Other stations' },
   ];
+  // The overview in vs. expected mode needs saying in words: the classes are a
+  // factor in either direction, not trips.
+  const note = state.sel === null && useResidual()
+    ? `How far trips with its top ${state.k} partners sit from expected, over or under. 1× = as predicted.`
+    : c.note;
   renderLegend(mapLegend, [
-    { title, note: c.note, rows: c.rows },
+    { title, note, rows: c.rows },
     ...(selected.length ? [{ rows: selected }] : []),
   ]);
 
@@ -567,7 +571,7 @@ function totalsTooltip(i) {
     `Trips to here: ${s.in.toLocaleString()}`;
   if (useResidual()) {
     const m = typicalMiss(i);
-    if (m) html += `<br>Typical miss vs. expected: ${fmtRatio(m)}`;
+    if (m) html += `<br>Typical gap from expected: ${fmtRatio(m)}`;
   }
   return html;
 }
