@@ -1,6 +1,8 @@
 # Citi Bike Station Network: NYC Citi Bike trips by station (2025)
 
-A station-level companion to
+This is another attempt to create a visualization that links an interactive force-directed network graph with an interactive map. The network nodes represent the map geography and the geographies are linked such that selecting a node in the network selects it in the map. The edges in the graph represent a relation between the geographies, and the edge-weight in the chart is represented as a color in the map and the node, allowing the places and their relations to be read against each other.
+
+This example is a second attempt at using this approach with the NYC Citi Bike trip data for 2025, it's a station-level companion to
 [LinkedNetworkGraphChoroplethMap](https://github.com/ssitari/LinkedNetworkGraphChoroplethMap), which
 links a force-directed network to a map of NYC Community District Tabulation Areas. Districts turned
 out to be too coarse for bike trips: the median Citi Bike trip is about 1.6 km in a straight line, and
